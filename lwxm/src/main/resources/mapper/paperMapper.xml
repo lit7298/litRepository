@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.lwxm.Mapper.PaperMapper">
+
+   <!-- 查询是否有studentId,没有则表明是第一次提交 -->
+   <select id="findStudentId" parameterType="Integer" resultType="int">
+   		select count(0) from check_record where student_id=#{id}   
+   </select>
+   
+   <!-- 根据studentId查询本条记录的id -->
+   <select id="findId" parameterType="CheckRecord" resultType="Long">
+   		select id from check_record where student_id=#{studentId}   
+   </select>
+   
+   <!-- 获取原始路径 -->
+   <select id="getPathId" parameterType="CheckRecord" resultType="String">
+   		select thesis_path from check_record where id=#{id}   
+   </select>
+   
+   <!-- 查询已经提交的次数 -->
+   <select id="selectCheckCount" parameterType="CheckRecord" resultType="int">
+   		select check_count from check_record where student_id=#{studentId}   
+   </select>
+   
+   
+    <!-- 查询论文 -->
+   <select id="findPaperList" parameterType="UserStudent" resultType="Map">
+   		SELECT
+		  cr.id,
+		  cr.student_id as studentId,
+		  cr.check_count as checkCount,
+		  cr.check_result as checkResult,
+		  cr.thesis_path as thesisPath,
+		  us.student_number as studentNumber,
+		  us.full_name as fullName,
+		  us.college_name as collegeName,
+		  us.major_name as majorName
+		  FROM check_record cr
+		  LEFT JOIN user_student us
+		    ON cr.student_id = us.id     
+	        <where>
+           		<if test="studentNumber!=null and studentNumber!='' ">us.student_number = #{studentNumber}</if>
+           		<if test="fullName!=null and fullName!='' ">and us.full_name=#{fullName}</if>
+           		<if test="collegeName!=null and collegeName!='' ">and us.college_name = #{collegeName}</if>
+           		<if test="majorName!=null and majorName!='' ">and us.major_name=#{majorName}</if>
+           		<if test="className!=null and className!='' ">and us.class_name=#{className}</if>
+            </where>
+   </select>
+  
+</mapper>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.lwxm.Mapper.IndexMapper">
+    <!-- 老师登录 -->
+   <select id="findTeacherByUserName" resultType="Map">
+      select 
+      	id,
+        teacher_number as userNumber,
+        teacher_name as teacherName,
+        teacher_password as password,
+        user_type as userType
+      from user_teacher
+      where teacher_number=#{userName} and user_type=0
+   </select>
+   
+   <!-- 学生登入 -->
+   <select id="findStudentByUserName" resultType="Map">
+   		select
+   		  id,
+   		  student_number as userNumber,
+   		  student_password as password,
+   		  full_name as fullName,
+   		  before_name as beforeName,
+   		  sex,
+   		  major_name as majorName,
+   		  face_image as faceImage
+   		from user_student
+   		where student_number=#{userName}
+   </select>
+</mapper>
